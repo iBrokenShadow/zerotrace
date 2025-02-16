@@ -59,7 +59,7 @@ db.getConnection((err, connection) => {
         console.error("Database connection failed:", err);
         return;
     }
-    console.log("âœ… Connected to MySQL Database.");
+    console.log("👾 Connected to MySQL Database.");
     connection.release(); // Always release the connection after using it
 });
 const checkConnection = () => {
