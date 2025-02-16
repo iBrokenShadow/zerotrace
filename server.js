@@ -205,6 +205,25 @@ app.get("/api/download/:token", (req, res) => {
     });
 });
 
+
+app.get("/:token", async (req, res) => {
+    const token = req.params.token;
+
+    db.query("SELECT files FROM uploads WHERE token = ?", [token], (err, result) => {
+        if (err) {
+            console.error("Database Query Error:", err);
+            return res.status(500).send("Server error.");
+        }
+        if (result.length === 0) {
+            return res.status(404).send("Invalid or expired link.");
+        }
+
+        // Redirect to the download API
+        res.redirect(`/api/download/${token}`);
+    });
+});
+
+
 // Serve Uploaded Files
 app.get("/api/files/:filename", (req, res) => {
     checkConnection();

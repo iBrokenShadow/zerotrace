@@ -64,13 +64,51 @@ function hideLoaderAndShowButton() {
 
 
 
-
-
-
-
 let token
 let tokenTEMP;
 let tokenTEMPDelete;
+
+
+
+
+
+// MAGIC FILE SHARING
+document.addEventListener("DOMContentLoaded", () => {
+  let url = window.location.href;
+
+  // Remove "http://", "https://", and "file://"
+  url = url.replace(/^https?:\/\//, "").replace(/^file:\/\//, "");
+
+  // Find the first single slash (ignoring double slashes)
+  const firstSlashIndex = url.indexOf("/");
+
+  if (firstSlashIndex !== -1 && firstSlashIndex < url.length - 1) {
+      const token = url.substring(firstSlashIndex + 1); // Extract token
+      if (token.length > 0 && token.length <= 15) {
+        console.log("Magic link detected:", token);
+
+        // Wait 2 seconds before calling the function
+        setTimeout(() => {
+            handleMagicLink(token);
+        }, 1000);
+      }
+  }
+});
+
+
+function handleMagicLink(token) {
+  closePopup();
+  showSection('downloadSection');
+  downloadFiles(token);
+}
+
+// -----------------------------------------------------------------------------------
+
+
+
+
+
+
 async function ZipAllFiles() {
   try {
     disableOtherButtons();
