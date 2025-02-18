@@ -81,10 +81,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Find the first single slash (ignoring double slashes)
   const firstSlashIndex = url.indexOf("/");
+  console.log(firstSlashIndex);
 
   if (firstSlashIndex !== -1 && firstSlashIndex < url.length - 1) {
       const token = url.substring(firstSlashIndex + 1); // Extract token
       if (token.length > 0 && token.length <= 15) {
+        tokenTEMP = token;
+        tokenTEMPDelete = token;
         console.log("Magic link detected:", token);
 
         // Wait 2 seconds before calling the function
@@ -97,6 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 function handleMagicLink(token) {
+  window.history.replaceState({}, document.title, "/");
   closePopup();
   showSection('downloadSection');
   downloadFiles(token);
