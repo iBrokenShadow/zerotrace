@@ -1135,7 +1135,7 @@ ul {
   align-items: flex-start;
   justify-content: space-between;
   padding: 20px;
-  gap: 15px;
+  gap: 1px;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -1170,7 +1170,6 @@ ul {
 .cookie-heading {
   color: rgba(32, 32, 32, 0.826);
   font-weight: 800;
-  margin-bottom: 10px;
 }
 
 /* Token Text Styling */
@@ -1179,7 +1178,6 @@ ul {
   font-weight: 400;
   font-size: 19px;
   color: rgb(43, 43, 43);
-  margin-bottom: 20px;
 }
 
 /* Button Layout (align token text and copy button) */
@@ -1192,7 +1190,8 @@ ul {
 
 .copy {
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
+  margin-right: 10px;
   align-items: center;
   background-color: #aba8a8;
   color: rgb(0, 0, 0);
@@ -1210,6 +1209,31 @@ ul {
 .copy svg {
   margin-right: 2px;
 }
+
+.href-magicLink {
+  text-decoration: none;
+  color: inherit;
+  margin-top: 15px;
+  margin-bottom: 7px;
+  display: inline-block;
+}
+
+.cookie-heading {
+  transition: color 0.3s ease, transform 0.3s ease, text-shadow 0.3s ease;
+}
+
+.href-magicLink:hover .cookie-heading {
+  color: #00c853; /* Bright smooth green */
+  transform: scale(1.05); /* Gentle zoom */
+  text-shadow: 
+    -1px -1px 0 #000,  
+     1px -1px 0 #000,  
+    -1px  1px 0 #000,  
+     1px  1px 0 #000; /* Black thin border effect */
+}
+
+
+
 
 .accept, .exit-button {
   margin-top: 15px;
@@ -3090,3 +3114,155 @@ a:hover {
 }
 
 
+
+
+
+
+
+
+
+
+
+#coolAppBanner {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+  color: #ffffff;
+  padding: 14px 20px;
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0, 255, 170, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  z-index: 9999;
+  opacity: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  max-width: 90%;
+  min-width: 300px;  /* 🆕 MIN WIDTH */
+  overflow: hidden;
+}
+
+#coolAppBanner.show {
+  opacity: 1;
+  transform: translateX(-50%);
+  animation: bounceIn 0.8s ease forwards;
+}
+
+#coolInstallBtn {
+  background: #00ffa5;
+  color: #0f0f0f;
+  border: none;
+  margin-left: 15px;
+  border-radius: 15px;
+  padding: 8px 16px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.banner-content {
+  margin-left: 10px;
+}
+
+#coolInstallBtn:hover {
+  background: #00e396;
+  transform: scale(1.1) rotate(-1deg);
+}
+
+#closeBannerBtn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    margin-top: 5px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+#closeBannerBtn:hover {
+  color : #00e396;
+  transform: scale(1.6) rotate(-1deg);
+}
+
+.hidden {
+  display: none;
+}
+
+/* Bounce In */
+@keyframes bounceIn {
+  0% {
+    transform: translateX(-50%) translateY(-200px);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-50%) translateY(30px);
+    opacity: 1;
+  }
+  80% {
+    transform: translateX(-50%) translateY(-10px);
+  }
+  100% {
+    transform: translateX(-50%) translateY(0px);
+  }
+}
+
+/* Shake Animation */
+@keyframes shake {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(calc(-50% - 5px)) translateY(0); }
+  20%, 40%, 60%, 80% { transform: translateX(calc(-50% + 5px)) translateY(0); }
+}
+
+/* Fade Out Animation */
+@keyframes fadeOutUp {
+  0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-100px); }
+}
+
+/* Mobile specific adjustment */
+@media (max-width: 768px) {
+  #coolAppBanner {
+    top: auto;
+    bottom: 20px;
+    transform: translateX(-50%);
+    min-width: 280px; /* 🆕 smaller min width on phones */
+    max-width: 280px; /* 🆕 smaller min width on phones */
+  }
+
+  #coolInstallBtn {
+    margin-left: 5px;
+    margin-top: 5px;
+  }
+
+  @keyframes bounceIn {
+    0% {
+      transform: translateX(-50%) translateY(250px);
+      opacity: 0;
+    }
+    60% {
+      transform: translateX(-50%) translateY(-30px);
+      opacity: 1;
+    }
+    80% {
+      transform: translateX(-50%) translateY(15px);
+    }
+    100% {
+      transform: translateX(-50%) translateY(0px);
+    }
+  }
+
+  @keyframes fadeOutUp {
+    0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(100px); }
+  }
+}

@@ -44,11 +44,6 @@ window.addEventListener("load", () => {
   setTimeout(triggerButtonAnimation, 1500); // Adjust the timing as needed
 });
 
-// Test
-
-
-
-
 
 
 
@@ -133,10 +128,152 @@ function closeTooltip(tooltipId) {
 
 
 
+// Helper: detect if running as installed PWA/app
+function isInStandaloneMode() {
+  // iOS
+  if (window.navigator.standalone) return true;
+  // Chrome < 93 or other browsers supporting “standalone”
+  if (window.matchMedia('(display-mode: standalone)').matches) return true;
+  // Chrome > 93 with window-controls-overlay
+  if (window.matchMedia('(display-mode: window-controls-overlay)').matches) return true;
+  return false;
+}
+
+window.addEventListener('load', () => {
+  // 1) Don’t show banner if already installed/opened as app
+  if (isInStandaloneMode()) return;
+
+  const banner = document.getElementById('coolAppBanner');
+  const button = document.getElementById('coolInstallBtn');
+
+  // 2) Show Banner After 2 Seconds
+  setTimeout(() => {
+    banner.classList.remove('hidden');
+    setTimeout(() => banner.classList.add('show'), 100);
+  }, 500);
+
+  // 3) Shake if user doesn’t click by 7 seconds
+  setTimeout(() => {
+    if (banner.classList.contains('show')) {
+      banner.style.animation = "shake 0.5s";
+      banner.style.animationIterationCount = "1";
+    }
+  }, 6000);
+
+  // 4) Auto-hide with fade-out at 16 seconds
+  setTimeout(() => {
+    if (banner.classList.contains('show')) {
+      banner.style.animation = "fadeOutUp 1s forwards";
+      setTimeout(() => banner.remove(), 1000);
+    }
+  }, 13000);
+});
+
+// Confetti + redirect
+function triggerConfetti() {
+  const duration = 2000;
+  const end = Date.now() + duration;
+  const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 10000 };
+
+  function random(min, max) { return Math.random() * (max - min) + min; }
+
+  const interval = setInterval(() => {
+    const timeLeft = end - Date.now();
+    if (timeLeft <= 0) return clearInterval(interval);
+
+    const count = 50 * (timeLeft / duration);
+    confetti(Object.assign({}, defaults, {
+      particleCount: count,
+      origin: { x: random(0.1, 0.9), y: Math.random() - 0.2 }
+    }));
+  }, 250);
+
+  // redirect after confetti
+  setTimeout(() => {
+    window.location.href = '/';
+  }, duration);
+}
+
+
+
+// BUTTON SERVING FILES
+const installButton        = document.getElementById('coolInstallBtn');
+const installNotification  = document.getElementById('install-notification');
+const banner               = document.getElementById('coolAppBanner');
+let deferredPrompt = null;
+
+function hideBanner() {
+  banner.style.animation = 'fadeOutUp 1s forwards';
+  setTimeout(() => banner.remove(), 1000);
+  if (installNotification) {
+    installNotification.style.transition = 'opacity 0.5s';
+    installNotification.style.opacity = 0;
+    setTimeout(() => installNotification.style.display = 'none', 500);
+  }
+}
+
+// Only capture the install prompt on non-Android browsers
+window.addEventListener('beforeinstallprompt', (e) => {
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+  if (!/android/i.test(ua)) {
+    e.preventDefault();
+    deferredPrompt = e;
+  }
+});
+
+installButton.addEventListener('click', async () => {
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+
+  // 🛑 Fix: First check if app is already installed
+  if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+    showSuccessPopup("Already installed on your PC! 🚀 Opening...");
+    window.focus();
+    hideBanner();
+    return;
+  }
+
+  // 1. Android → direct APK download
+  if (/android/i.test(ua)) {
+    const apkUrl = '/zerotrace.apk';
+    try {
+      const res = await fetch(apkUrl, { method: 'HEAD' });
+      if (!res.ok) throw new Error('APK not found');
+      window.location.href = apkUrl;
+      triggerConfetti();
+    } catch (err) {
+      showSuccessPopup("Sorry! Download failed. Please try again later. 😥");
+      hideBanner();
+    }
+
+  // 2. iOS → custom “add to home” popup
+  } else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
+    showSuccessPopup(
+      `Please add ZeroTrace manually to your Home Screen 📱✨<br>See here how <a href="https://www.lbbd.gov.uk/add-webpage-your-smartphonetablet-home-screen" target="_blank" style="color: #00cc66; text-decoration: underline;">🔗</a>`
+    );    
+    hideBanner();
+
+  // 3. Desktop (and other non-Android) → PWA prompt
+  } else {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(choice => {
+        if (choice.outcome === 'accepted') {
+          triggerConfetti();
+        }
+        deferredPrompt = null;
+      });
+    } else {
+      showSuccessPopup("Seems already installed. If not then use Chrome!");
+    }
+    hideBanner();
+  }
+});
 
 
 
 
+
+// END
 
 
 
@@ -234,8 +371,8 @@ function showSuccessPopup(message) {
   const popup = document.getElementById("success-popup");
   const overlay = document.getElementById("success-overlay");
 
-  // Insert the dynamic message
-  document.getElementById("success-message").innerText = message;
+  // Insert dynamic message with HTML support
+  document.getElementById("success-message").innerHTML = message;
 
   // Show with fade-in effect
   popup.style.display = "block";
@@ -251,6 +388,7 @@ function showSuccessPopup(message) {
     closeSuccessPopup();
   };
 }
+
 
 function closeSuccessPopup() {
   const popup = document.getElementById("success-popup");

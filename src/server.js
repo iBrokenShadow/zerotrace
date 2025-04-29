@@ -46,12 +46,12 @@ const upload = multer({ storage, limits: { fileSize: 30 * 1024 * 1024 } }); // 3
 
 // MySQL Database Connection
 const db = mysql.createPool({
-    host: process.env.DB_HOST || "xxx",
-    user: process.env.DB_USER || "xxx",
-    password: process.env.DB_PASSWORD || "xxx",
-    database: process.env.DB_NAME || "xxx",
-    port: process.env.DB_PORT || 3306,
-    connectionLimit: 10, // Set the connection limit
+    host: process.env.DB_HOST || "localhost",      // Use DB_HOST from .env
+    user: process.env.DB_USER || "root",           // Use DB_USER from .env
+    password: process.env.DB_PASSWORD || "",       // Use DB_PASSWORD from .env
+    database: process.env.DB_NAME || "zerotrace",       // Use DB_NAME from .env
+    port: process.env.DB_PORT || 3306,             // Use DB_PORT from .env
+    connectionLimit: 10,                           // Set the connection limit
 });
 
 db.getConnection((err, connection) => {
@@ -436,31 +436,30 @@ const transporter = nodemailer.createTransport({
 });
 
 // Email Sending API
+
 app.post("/api/send-email", async (req, res) => {
-    // console.log("Received request body:", req.body); // Debugging log 
+  const { emailMessage } = req.body;
+  if (!emailMessage) {
+    return res.status(400).json({ success: false, error: "Missing emailMessage" });
+  }
 
-    const { emailMessage } = req.body; // Get emailMessage from request
+  const mailOptions = {
+    from: `"ZeroTrace Report Error" <${process.env.SMTP_USER}>`,
+    to: "echo@ibrokenshadow.com",
+    subject: "Error Reported",
+    text: "Error details in HTML format",      // plain text fallback
+    html: emailMessage                         // your HTML body
+  };
 
-    if (!emailMessage) {
-        return res.status(400).json({ success: false, error: "Missing emailMessage in request body" });
-    }
-
-    const mailOptions = {
-        from: '"ZeroTrace Report Error" <zerotrace@ibrokenshadow.com>',
-        to: "zerotrace@ibrokenshadow.com",
-        subject: "Error Reported",
-        // You can pass the `emailMessage` (the HTML formatted message)
-        text: "Error details in HTML format", // Fallback text version of the email
-        html: `${emailMessage}`, // The HTML message that is passed from the client
-    };    
-
-    try {
-        let info = await transporter.sendMail(mailOptions);
-        res.json({ success: true, messageId: info.messageId });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    res.json({ success: true, messageId: info.messageId });
+  } catch (error) {
+    console.error("Email send failed:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
+
 
 
 

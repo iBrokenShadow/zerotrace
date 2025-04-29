@@ -10,10 +10,41 @@
   <title>ZeroTrace - A PrivShare Network</title>
   <link rel="icon" type="image/x-icon" href="img/ZeroTrace/favicon.ico">
   <link rel="shortcut icon" href="img/ZeroTrace/favicon.ico">
+  
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" href="img/icon-192.png">
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(function(reg) {
+          console.log('Service worker registered with scope:', reg.scope);
+        })
+        .catch(function(error) {
+          console.log('Service worker registration failed:', error);
+        });
+    }
+  </script>
+
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+
+  <div id="coolAppBanner" class="hidden">
+    <button id="closeBannerBtn" onclick="hideBanner()">×</button>
+  
+  <div class="banner-content">
+      <span> - Wanna install <b>ZeroTrace</b>? 🚀 Be Faster?</span>
+      <button id="coolInstallBtn">Let's Go! 🎯</button>
+    </div>
+  </div>
+  
+  <!-- Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  
+  
+  
   <img src="img/ZeroTrace/walking.gif" class="gif-container" id="gifBox" alt="Walking Cat">
 
   <a class="pp" href="https://github.com/iBrokenShadow" target="_BLANK" title="Follow on Github👾"><img
@@ -71,11 +102,9 @@
         Recieve
       </button>
 
-
-
       <ul class="example-2" style="justify-content: end;">
         <li class="icon-content">
-          <a href="https://www.linkedin.com/in/ankush-gupta-76b173250/" target="_blank" aria-label="LinkedIn"
+          <a href="https://www.linkedin.com/in/imankushgupta/" target="_blank" aria-label="LinkedIn"
             data-social="linkedin">
             <div class="filled"></div>
             <svg width="16" height="16" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16"
@@ -127,6 +156,8 @@
     </div>
   </div>
 
+  
+
 
 
   <button class="top-btn" id="backButton" onclick="goBack()">
@@ -139,6 +170,7 @@
 
 
 
+      
   <div class="card2" id="uploadSection"> <br>
     <div class="card__border"></div>
     <button id="fileButton" class="button-SelectFiles"> Select Files </button>
@@ -169,10 +201,9 @@
 
 
     <div id="overlay" class="overlay" style="display: none;"></div>
-
     <div id="tokenPopup" class="cookies-card">
-      <p class="cookie-heading">Your Secret Key:</p>
       <div class="token-container">
+        <p class="cookie-heading">Key:</p>
         <p class="cookie-para" id="tokenText"></p>
         <button class="copy" onclick="copyToClipboard()">
           <span>
@@ -186,14 +217,23 @@
           </span>
         </button>
       </div>
+      
+      <div class="token-container">
+        <a href="" class="href-magicLink"><p class="cookie-heading">Magic - Link 🖇️</p></a>
+        <button class="copy" onclick="copyLinkToClipboard()">
+          <span>
+            <svg xml:space="preserve" viewBox="0 0 6.35 6.35" height="20" width="20" class="clipboard">
+              <g>
+                <path fill="currentColor"
+                  d="M2.43.265c-.3 0-.548.236-.573.53h-.328a.74.74 0 0 0-.735.734v3.822a.74.74 0 0 0 .735.734H4.82a.74.74 0 0 0 .735-.734V1.529a.74.74 0 0 0-.735-.735h-.328a.58.58 0 0 0-.573-.53zm0 .529h1.49c.032 0 .049.017.049.049v.431c0 .032-.017.049-.049.049H2.43c-.032 0-.05-.017-.05-.049V.843c0-.032.018-.05.05-.05zm-.901.53h.328c.026.292.274.528.573.528h1.49a.58.58 0 0 0 .573-.529h.328a.2.2 0 0 1 .206.206v3.822a.2.2 0 0 1-.206.205H1.53a.2.2 0 0 1-.206-.205V1.529a.2.2 0 0 1 .206-.206z">
+                </path>
+              </g>
+            </svg>
+          </span>
+        </button>
+      </div>
 
       <button class="accept cookie-button" id="gotchaButton" onclick="closePopup()">Gotcha</button>
-      <button class="exit-button" onclick="closePopup()">
-        <svg fill="none" viewBox="0 0 162 162" class="svgIconCross">
-          <path stroke-linecap="round" stroke-width="17" stroke="black" d="M9.01074 8.98926L153.021 153"></path>
-          <path stroke-linecap="round" stroke-width="17" stroke="black" d="M9.01074 153L153.021 8.98926"></path>
-        </svg>
-      </button>
     </div>
 
 

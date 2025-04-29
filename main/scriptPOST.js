@@ -1,14 +1,18 @@
+
+
 // Event Listeners
 document.getElementById("fileButton").addEventListener("click", function() {
     document.getElementById("fileInput").click();
   });
-  
-  
+
+  const magicLink = document.querySelector('.href-magicLink');
+
   // Function to copy content to clipboard
   function copyToClipboard() {
     // Get the text from the element with ID 'tokenText'
     const tokenText = document.getElementById('tokenText').innerText;
-    
+    const magicShareLink =  `http://localhost:3000/${tokenText}`;
+
     // Create a temporary input element to select the text
     const tempInput = document.createElement('input');
     document.body.appendChild(tempInput);
@@ -23,6 +27,27 @@ document.getElementById("fileButton").addEventListener("click", function() {
     copyButton.setAttribute('data-text-initial', 'Copy to clipboard');
     closePopup()
   }
+
+    // Function to copy content to clipboard
+    function copyLinkToClipboard() {
+      // Get the text from the element with ID 'tokenText'
+      const tokenText = document.getElementById('tokenText').innerText;
+      const magicShareLink =  `http://localhost:3000/${tokenText}`;
+  
+      // Create a temporary input element to select the text
+      const tempInput = document.createElement('input');
+      document.body.appendChild(tempInput);
+      tempInput.value = magicShareLink;
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+    
+      // Optional: You can modify the button text or icon to indicate it's copied
+      const copyButton = document.querySelector('.copy span');
+      copyButton.setAttribute('data-text-end', 'Copied!');
+      copyButton.setAttribute('data-text-initial', 'Copy to clipboard');
+      closePopup()
+    }
   
   
   function ShowUploadButton() {
@@ -281,6 +306,7 @@ document.getElementById("fileButton").addEventListener("click", function() {
   
           // Show the token in the pop-up
           document.getElementById("tokenText").innerText = result.token;
+          magicLink.href = `http://localhost:3000/${result.token}`;
           
           selectedFiles=[];
           ShowUploadButton();

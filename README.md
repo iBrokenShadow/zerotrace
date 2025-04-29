@@ -32,6 +32,13 @@ ZeroTrace is a **highly secure, token-based file-sharing platform** designed for
 - **Monitor active uploads & storage.**
 - **View system logs & manage user activities.**
 
+### 🔹 **Progressive Web App (PWA) Support** 📱💻
+- **Installable on Android, iOS, and Desktop**.
+- Provides an **app-like experience** with offline capabilities.
+- Seamless performance with **push notifications** and **background sync** *(where supported)*.
+- Users can add ZeroTrace to their **home screen or desktop** with one tap.
+
+
 ---
 
 ## 🏗️ Technology Stack

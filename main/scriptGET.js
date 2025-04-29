@@ -52,7 +52,7 @@ function hideLoaderAndShowButton() {
     setTimeout(() => {
       loader.style.display = "none"; // Hide loader
       resolve(); // Resolve the promise after loader is hidden
-    }, 5000); // Wait for fade-out animation to complete (0.5s transition)
+    }, 500); // Wait for fade-out animation to complete (0.5s transition)
   });
 }
 
@@ -76,14 +76,14 @@ let tokenTEMPDelete;
 document.addEventListener("DOMContentLoaded", () => {
   let url = window.location.href;
 
-  // Remove "http://", "https://", and "file://"
+ //  Remove "http://", "https://", and "file://"
   url = url.replace(/^https?:\/\//, "").replace(/^file:\/\//, "");
 
   // Find the first single slash (ignoring double slashes)
   const firstSlashIndex = url.indexOf("/");
   console.log(firstSlashIndex);
 
-  if (firstSlashIndex !== -1 && firstSlashIndex < url.length - 1) {
+ if (firstSlashIndex !== -1 && firstSlashIndex < url.length - 1) {
       const token = url.substring(firstSlashIndex + 1); // Extract token
       if (token.length > 0 && token.length <= 15) {
         tokenTEMP = token;
@@ -91,9 +91,9 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Magic link detected:", token);
 
         // Wait 2 seconds before calling the function
-        setTimeout(() => {
+       setTimeout(() => {
             handleMagicLink(token);
-        }, 1000);
+      }, 1000);
       }
   }
 });
@@ -125,7 +125,7 @@ async function ZipAllFiles() {
       console.error(`Failed to download zip. Status: ${response.status}`);
       throw new Error(`Server responded with status ${response.status}`);
     }
-
+    
     let result;
     try {
       result = await response.json();
@@ -212,7 +212,7 @@ async function ZipAllFiles() {
 // File download functions
 async function downloadFiles(tokenTEMP) {
   const tokenInput = document.getElementById("tokenInput");
-
+  console.log(tokenInput)
   if (tokenInput.value == '') {
     token = tokenTEMP;
     console.log(token);

@@ -1,0 +1,17 @@
+# Save this in current folder as .env (Enter all credentials according to your set)
+
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=zerotrace
+DB_PORT=3306
+PORT=3000
+UPLOAD_DIR=uploads
+
+SMTP_HOST=smtp.xxxxx.com
+SMTP_USER=
+SMTP_PASS=
+SMTP_PORT=465
+SSL_TLS=true
+
+# nodemailer

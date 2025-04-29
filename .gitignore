@@ -1,20 +1,10 @@
 # Ignore environment files
-.env
-.env.local
-.env.production
-.env.development
+src/.env
 
 # Ignore node_modules
-node_modules/
-imp/
-uploads/
+src/node_modules/
 npm-debug.log
 yarn-error.log
 .DS_Store
-
-
-# id auto increment
-# ip
-# date and time of log
-# url_requested
-# android - PC
+query.sql
+imp.txt
